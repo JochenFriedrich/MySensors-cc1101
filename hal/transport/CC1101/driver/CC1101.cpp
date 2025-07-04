@@ -521,26 +521,31 @@ static uint8_t CC1101_getAddress(void)
 
 static void CC1101_ATC()
 {
-	return;
-	// TODO: Implement ATC.
+	int8_t delta = CC1101.targetRSSI - CC1101.currentPacket.ACK.RSSI;
+	cc1101_powerLevel_t newPowerLevel = CC1101.powerLevel;
 
-  /*
-	int8_t delta;
-	cc1101_powerLevel_t newPowerLevel;
-	delta = CC1101.targetRSSI - CC1101.currentPacket.ACK.RSSI;
-	cc1101_powerLevel_t oldPowerLevel = CC1101.powerLevel;
-	newPowerLevel = CC1101.powerLevel + delta / 2;
-	newPowerLevel = constrain(newPowerLevel, MY_CC1101_MIN_POWER_LEVEL_DBM,
-							  MY_CC1101_MAX_POWER_LEVEL_DBM);
-	CC1101_DEBUG(PSTR("CC1101:ATC:cR=%d, tR=%d, rTXL=%d\n"),
+	if (delta > CC1101_ATC_TARGET_RANGE_DBM) {
+		// RSSI is too low, increase power
+		if (CC1101.powerLevel < MY_CC1101_POWER_7) {
+			newPowerLevel = (cc1101_powerLevel_t)(CC1101.powerLevel + 1);
+		}
+	} else if (delta < -CC1101_ATC_TARGET_RANGE_DBM) {
+		// RSSI is too high, decrease power
+		if (CC1101.powerLevel > MY_CC1101_POWER_0) {
+			newPowerLevel = (cc1101_powerLevel_t)(CC1101.powerLevel - 1);
+		}
+	}
+
+	CC1101_DEBUG(PSTR("CC1101:ATC:cR=%d, tR=%d, pL=%d, newPL=%d\n"),
 				 CC1101.currentPacket.ACK.RSSI,
 				 CC1101.targetRSSI,
+				 CC1101.powerLevel,
 				 newPowerLevel);
+
 	if (newPowerLevel != CC1101.powerLevel)
 	{
 		CC1101_txPower(newPowerLevel);
 	}
-  */
 }
 
 static void CC1101_setATC(bool onOff, int8_t targetRSSI)
