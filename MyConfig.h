@@ -45,7 +45,7 @@
  * @note Values in parenthesis indicate default values which will be used if you have not defined
  * the flag in your sketch.
  */
-//#define MY_DEBUG
+// #define MY_DEBUG
 
 /**
  * @def MY_DEBUGDEVICE
@@ -1243,6 +1243,105 @@
 #endif
 
 /** @}*/ // End of SX126xSettingGrpPub group
+
+/**
+ * @defgroup CC1101SettingGrpPub CC1101
+ * @ingroup TransportSettingGrpPub
+ * @brief These options are specific to the %CC1101 family of wireless transport modules.
+ *
+ * The following chips are supported by this driver:
+ * - TI CC1101
+ * @{
+ */
+
+/**
+ * @def MY_RADIO_CC1101
+ * @brief Define this to use CC1101 based radios for sensor network communication.
+ */
+//#define MY_RADIO_CC1101
+
+/**
+ * @def MY_CC1101_CS_PIN
+ * @brief CC1101 SPI chip select pin.
+ */
+#ifndef MY_CC1101_CS_PIN
+#define MY_CC1101_CS_PIN DEFAULT_CC1101_CS_PIN
+#endif
+
+/**
+ * @def MY_CC1101_GD0_PIN
+ * @brief cc1101 GD0 pin
+ */
+#ifndef MY_CC1101_GD0_PIN
+#define MY_CC1101_GD0_PIN DEFAULT_CC1101_GD0_PIN
+#define MY_CC1101_GD0_NUM digitalPinToInterrupt(MY_CC1101_GD0_PIN)
+#endif
+
+/**
+ * @def MY_CC1101_FREQUENCY
+ * @brief The base frequency to use.
+ *
+ * - CC1101_315MHZ
+ * - CC1101_433MHZ
+ * - CC1101_868MHZ
+ * - CC1101_915MHZ
+ *
+ * This must match the hardware version of the CC1101 radio.
+ * Additional information: https://en.wikipedia.org/wiki/Short_Range_Devices
+ */
+#ifndef MY_CC1101_FREQUENCY
+#define MY_CC1101_FREQUENCY (CC1101_433MHZ)
+#endif
+
+/**
+ * @def MY_CC1101_CHANNEL
+ * @brief The channel number to use.
+ *
+ * The actual carrier frequency is given by the base frequency, plus
+ * the channel bandwidth x channel number.
+ *
+ * The defaults of this driver set a base frequency of 433.1MHz, a bandwidth
+ * of 200KHz and channel 4, giving a carrier frequency of 433.9MHz.
+ */
+#ifndef MY_CC1101_CHANNEL
+#define MY_CC1101_CHANNEL 4
+#endif
+
+/**
+ * @def MY_CC1101_DISABLE_ATC
+ * @brief If defined, ATC will be disabled
+ */
+//#define MY_CC1101_DISABLE_ATC
+
+/**
+ * @def MY_CC1101_ATC_TARGET_DBM
+ * @brief Sets the target RSSI level for the ATC. Defaults to -70dBm
+ */
+#ifndef MY_CC1101_ATC_TARGET_DBM
+#define MY_CC1101_ATC_TARGET_DBM (-70)
+#endif
+
+/**
+ * @def MY_CC1101_MAX_POWER_LEVEL_DBM
+ * @brief Sets the maximum allowable output power level. Default: 13dBm (20mW)
+ *
+ * Please check local regulations!
+ */
+#ifndef MY_CC1101_MAX_POWER_LEVEL_DBM
+#define MY_CC1101_MAX_POWER_LEVEL_DBM (10)
+#endif
+
+/**
+ * @def MY_CC1101_MIN_POWER_LEVEL_DBM
+ * @brief Sets the minimum output power level. Used in ATC. Default: 0dBm (0.5mW)
+ */
+#ifndef MY_CC1101_MIN_POWER_LEVEL_DBM
+#define MY_CC1101_MIN_POWER_LEVEL_DBM (-20)
+#endif
+
+/** @}*/ // End of CC1101SettingGrpPub group
+
+
 
 /**
  * @defgroup SoftSpiSettingGrpPub Soft SPI
@@ -2555,7 +2654,7 @@
 #endif
 
 // Enable sensor network "feature" if one of the transport types was enabled
-#if defined(MY_RADIO_RF24) || defined(MY_RADIO_NRF5_ESB) || defined(MY_RADIO_RFM69) || defined(MY_RADIO_RFM95) || defined(MY_RADIO_SX126x) || defined(MY_RS485) || defined(MY_PJON)
+#if defined(MY_RADIO_RF24) || defined(MY_RADIO_NRF5_ESB) || defined(MY_RADIO_RFM69) || defined(MY_RADIO_RFM95) || defined(MY_RADIO_SX126x) || defined(MY_RS485) || defined(MY_PJON) || defined(MY_RADIO_CC1101)
 #define MY_SENSOR_NETWORK
 #endif
 
