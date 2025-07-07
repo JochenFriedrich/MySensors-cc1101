@@ -1307,6 +1307,10 @@
 #define MY_CC1101_CHANNEL 4
 #endif
 
+#ifndef MY_CC1101_MODEM_CONFIGURATION
+#define MY_CC1101_MODEM_CONFIGURATION CC1101_MODEM_M_BR38_4_FD20
+#endif
+
 /**
  * @def MY_CC1101_DISABLE_ATC
  * @brief If defined, ATC will be disabled
@@ -1322,21 +1326,21 @@
 #endif
 
 /**
- * @def MY_CC1101_MAX_POWER_LEVEL_DBM
+ * @def MY_CC1101_MAX_POWER_LEVEL
  * @brief Sets the maximum allowable output power level. Default: 13dBm (20mW)
  *
  * Please check local regulations!
  */
-#ifndef MY_CC1101_MAX_POWER_LEVEL_DBM
-#define MY_CC1101_MAX_POWER_LEVEL_DBM (10)
+#ifndef MY_CC1101_MAX_POWER_LEVEL
+#define MY_CC1101_MAX_POWER_LEVEL (7)
 #endif
 
 /**
- * @def MY_CC1101_MIN_POWER_LEVEL_DBM
+ * @def MY_CC1101_MIN_POWER_LEVEL
  * @brief Sets the minimum output power level. Used in ATC. Default: 0dBm (0.5mW)
  */
-#ifndef MY_CC1101_MIN_POWER_LEVEL_DBM
-#define MY_CC1101_MIN_POWER_LEVEL_DBM (-20)
+#ifndef MY_CC1101_MIN_POWER_LEVEL
+#define MY_CC1101_MIN_POWER_LEVEL (0)
 #endif
 
 /** @}*/ // End of CC1101SettingGrpPub group
