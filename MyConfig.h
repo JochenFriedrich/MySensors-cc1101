@@ -1307,41 +1307,73 @@
 #define MY_CC1101_CHANNEL 4
 #endif
 
-#ifndef MY_CC1101_MODEM_CONFIGURATION
-#define MY_CC1101_MODEM_CONFIGURATION CC1101_MODEM_M_BR38_4_FD20
-#endif
+/**
+ * @def MY_CC1101_SYNC_WORD
+ * @brief Sync word can be used to differentiate multiple networks on a channel.
+ *
+ * The CC1101 radio transmits this at the start of each packet and on reception
+ * discards packets with mismatched sync words. You can change this to create
+ * multiple logical networks on the same radio channel, or avoid interference
+ * from nearby CC1101 based radios not in your network.
+ */
+//#define MY_CC1101_SYNC_WORD 0xF543
 
 /**
- * @def MY_CC1101_DISABLE_ATC
- * @brief If defined, ATC will be disabled
+ * @def MY_CC1101_MODEM_CONFIGURATION
+ * @brief Defines the model speed and modulation parameters.
+ *
+ * Available options (all 2FSK modulation):
+ *
+ * - CC1101_MODEM_S_BR4_8_FD20 - 4.8kBaud
+ * - CC1101_MODEM_M_BR38_4_FD20 - 38.4kBaud [default]
+ * - CC1101_MODEM_F_BR100_FD50 - 100kBaud
+ * - CC1101_MODEM_XF_BR250_FD125 - 250kBaud
+ *
+ * Slower speeds can provide for longer range, though as they have a
+ * longer transmit time, they can consume more power overall.
+ *
  */
-//#define MY_CC1101_DISABLE_ATC
+//#define MY_CC1101_MODEM_CONFIGURATION CC1101_MODEM_M_BR38_4_FD20
+
+/**
+ * @def MY_CC1101_POWER_LEVEL
+ * @brief Sets the transmit power level.
+ *
+ * There are 8 options, CC1101_POWER_[0-7] which range from
+ * -30dBm to 10dBm.
+ *
+ *  For nodes this defaults to CC1101_POWER_AUTO which uses signal reports
+ *  to automatically adjust the level.
+ *
+ *  For gateways, this defaults to CC1101_POWER_6. Using AUTO for gateways
+ *  and repeaters may be a problem if there are multiple nodes that will
+ *  have different reception quality, so only use AUTO if nodes have similar
+ *  distance and reception.
+ *
+ **/
+//#define MY_CC1101_POWER_LEVEL CC1101_POWER_AUTO
 
 /**
  * @def MY_CC1101_ATC_TARGET_DBM
- * @brief Sets the target RSSI level for the ATC. Defaults to -70dBm
+ * @brief Sets the target RSSI level for the ATC. Defaults to -50dBm
  */
 #ifndef MY_CC1101_ATC_TARGET_DBM
-#define MY_CC1101_ATC_TARGET_DBM (-70)
+#define MY_CC1101_ATC_TARGET_DBM (-50)
 #endif
 
 /**
  * @def MY_CC1101_MAX_POWER_LEVEL
- * @brief Sets the maximum allowable output power level. Default: 13dBm (20mW)
+ * @brief Sets the maximum allowable output power level for AUTO. Default: 10dBm (10mW)
  *
  * Please check local regulations!
  */
-#ifndef MY_CC1101_MAX_POWER_LEVEL
-#define MY_CC1101_MAX_POWER_LEVEL (7)
-#endif
+//#define MY_CC1101_MAX_POWER_LEVEL (7)
 
 /**
  * @def MY_CC1101_MIN_POWER_LEVEL
- * @brief Sets the minimum output power level. Used in ATC. Default: 0dBm (0.5mW)
+ * @brief Sets the minimum allowable output power level for AUTO. Default: -30dBm (0.001mW)
  */
-#ifndef MY_CC1101_MIN_POWER_LEVEL
-#define MY_CC1101_MIN_POWER_LEVEL (0)
-#endif
+//#define MY_CC1101_MIN_POWER_LEVEL (0)
 
 /** @}*/ // End of CC1101SettingGrpPub group
 

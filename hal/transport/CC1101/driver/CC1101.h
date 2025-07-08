@@ -78,54 +78,73 @@
 
 // Power levels represent which entry in the PA_TABLE to use.
 typedef enum cc1101PowerLevel_e {
-  MY_CC1101_POWER_0 = 0x0, // -30dBm
-  MY_CC1101_POWER_1 = 0x1, // -20dBm
-  MY_CC1101_POWER_2 = 0x2, // -15dBm
-  MY_CC1101_POWER_3 = 0x3, // -10dBm
-  MY_CC1101_POWER_4 = 0x4, //  0dBm
-  MY_CC1101_POWER_5 = 0x5, //  5dBm
-  MY_CC1101_POWER_6 = 0x6, //  7dBm
-  MY_CC1101_POWER_7 = 0x7, //  10dBm
-  MY_CC1101_POWER_AUTO = 0xff,
+  CC1101_POWER_0 = 0x0, // -30dBm
+  CC1101_POWER_1 = 0x1, // -20dBm
+  CC1101_POWER_2 = 0x2, // -15dBm
+  CC1101_POWER_3 = 0x3, // -10dBm
+  CC1101_POWER_4 = 0x4, //  0dBm
+  CC1101_POWER_5 = 0x5, //  5dBm
+  CC1101_POWER_6 = 0x6, //  7dBm
+  CC1101_POWER_7 = 0x7, //  10dBm
+  CC1101_POWER_AUTO = 0xff,
 } cc1101_powerLevel_t;
+
+#ifndef MY_CC1101_POWER_LEVEL
+#ifdef MY_GATEWAY_FEATURE
+#define MY_CC1101_POWER_LEVEL CC1101_POWER_6
+#else
+#define MY_CC1101_POWER_LEVEL CC1101_POWER_AUTO
+#endif
+#endif
+
+#ifndef MY_CC1101_MIN_POWER_LEVEL
+#define MY_CC1101_MIN_POWER_LEVEL (0)
+#endif
+
+#ifndef MY_CC1101_MAX_POWER_LEVEL
+#define MY_CC1101_MAX_POWER_LEVEL (7)
+#endif
+
+#define CC1101_ATC_TARGET_RANGE_DBM (15) //!< ATC target range +/- dBm
+#define CC1101_RSSI_OFFSET (74u)          //!< RSSI offset
+#define CC1101_TARGET_RSSI (-50)          //!< RSSI target
 
 #define CC1101_MODEM_S_BR4_8_FD20 0
 #define CC1101_MODEM_M_BR38_4_FD20 1
 #define CC1101_MODEM_F_BR100_FD50 2
 #define CC1101_MODEM_XF_BR250_FD125 3
 
-#if MY_CC1101_MODEM_CONFIGURATION == CC1101_MODEM_S_BR4_8_FD20
+#ifndef MY_CC1101_MODEM_CONFIGURATION
+#define MY_CC1101_MODEM_CONFIGURATION CC1101_MODEM_M_BR38_4_FD20
+#endif
+
+#if (MY_CC1101_MODEM_CONFIGURATION) == (CC1101_MODEM_S_BR4_8_FD20)
 #define MY_CC1101_REG_MDMCFG4_VALUE 0x67 // 135KHz bw, 4800b
 #define MY_CC1101_REG_MDMCFG3_VALUE 0x83 // 4800b
 #define MY_CC1101_REG_MDMCFG2_VALUE 0x12
 #define MY_CC1101_REG_DEVIATN_VALUE 0x34 // 19khz dev.
-#elif MY_CC1101_MODEM_CONFIGURATION == CC1101_MODEM_M_BR38_4_FD20
+#elif (MY_CC1101_MODEM_CONFIGURATION) == (CC1101_MODEM_M_BR38_4_FD20)
 #define MY_CC1101_REG_MDMCFG4_VALUE 0x8a // 200KHz bw, 38.4kb
 #define MY_CC1101_REG_MDMCFG3_VALUE 0x82 // 38.4kb
 #define MY_CC1101_REG_MDMCFG2_VALUE 0x12
 #define MY_CC1101_REG_DEVIATN_VALUE 0x47 // 47khz dev.
-#elif MY_CC1101_MODEM_CONFIGURATION == CC1101_MODEM_F_BR100_FD50
+#elif (MY_CC1101_MODEM_CONFIGURATION) == (CC1101_MODEM_F_BR100_FD50)
 #define MY_CC1101_REG_MDMCFG4_VALUE 0x8B // 200KHz bw, 100kb
 #define MY_CC1101_REG_MDMCFG3_VALUE 0xF8 // 100kb
 #define MY_CC1101_REG_MDMCFG2_VALUE 0x12
 #define MY_CC1101_REG_DEVIATN_VALUE 0x47 // 47khz dev.
-#elif MY_CC1101_MODEM_CONFIGURATION == CC1101_MODEM_XF_BR250_FD125
+#elif (MY_CC1101_MODEM_CONFIGURATION) == (CC1101_MODEM_XF_BR250_FD125)
 #define MY_CC1101_REG_MDMCFG4_VALUE 0x5D // 320KHz bw, 250kb
 #define MY_CC1101_REG_MDMCFG3_VALUE 0x3B // 250kb
 #define MY_CC1101_REG_MDMCFG2_VALUE 0x12
 #define MY_CC1101_REG_DEVIATN_VALUE 0x62 // 125khz dev.
 #else
-#error Unknown MY_CC1101_MODEM_CONFIGURATION
+#error Invalid setting for MY_CC1101_MODEM_CONFIGURATION.
 #endif
 
-#define CC1101_MAX_PACKET_LEN                                                  \
-  (0x40u) //!< This is the maximum number of bytes that can be carried by the
-          //!< modem.
+#define CC1101_MAX_PACKET_LEN (0x40u) //!< Maximum packet size that can be carried by the modem.
 #define CC1101_PREAMBLE_LENGTH (8u) //!< Preamble length, default=8
 #define CC1101_BROADCAST_ADDRESS 0xFF
-#define CC1101_ATC_TARGET_RANGE_DBM (15u) //!< ATC target range +/- dBm
-#define CC1101_RSSI_OFFSET (74u)          //!< RSSI offset
-#define CC1101_TARGET_RSSI (-50)          //!< RSSI target
 
 #ifndef MY_CC1101_SYNC_WORD
 #define MY_CC1101_SYNC_WORD 0xF543

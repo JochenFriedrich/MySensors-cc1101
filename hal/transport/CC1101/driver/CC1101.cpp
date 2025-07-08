@@ -56,13 +56,14 @@ static bool CC1101_initialise() {
   CC1101.ackReceived = false;
   CC1101.dataReceived = false;
   CC1101.txSequenceNumber = 0;
-  CC1101.powerLevel = MY_CC1101_POWER_7;
-  CC1101.targetRSSI = CC1101_TARGET_RSSI;
-#ifdef MY_CC1101_ATC_DISABLED
-  CC1101.ATCenabled = false;
-#else
+#if (MY_CC1101_POWER_LEVEL) == (CC1101_POWER_AUTO)
+  CC1101.powerLevel = CC1101_POWER_7; // initial power.
   CC1101.ATCenabled = true;
+#else
+  CC1101.powerLevel = MY_CC1101_POWER_LEVEL; // fixed power.
+  CC1101.ATCenabled = false;
 #endif
+  CC1101.targetRSSI = CC1101_TARGET_RSSI;
   CC1101.txComplete = true;
 
   // Hardware check - when CSN is pulled low, SO should go low.
@@ -173,9 +174,11 @@ static void CC1101_handle() {
         CC1101.currentPacket.RSSI = CC1101_RSSI_from_chip((int8_t)chipRSSI);
         CC1101.currentPacket.LQI =
             CC1101.currentPacket.data[rxBytesLen - 1] & 0x7F;
+#ifdef MY_CC1101_DEBUG
         hwDebugBuf2Str((const uint8_t *)CC1101.currentPacket.data, rxBytesLen);
-        CC1101_DEBUG(PSTR("CC1101:RECV:DATA=%s,RSSI=%d (%d)\n"),
-                     hwDebugPrintStr, CC1101.currentPacket.RSSI, chipRSSI);
+        CC1101_DEBUG(PSTR("CC1101:RECV:DATA=%s,RSSI=%d LQI=%d\n"),
+                     hwDebugPrintStr, CC1101.currentPacket.RSSI, CC1101.currentPacket.LQI);
+#endif
         if (CC1101.currentPacket.header.version >=
             CC1101_MIN_PACKET_HEADER_VERSION) {
           CC1101.ackReceived =
@@ -476,17 +479,17 @@ static uint8_t CC1101_getAddress(void) {
 }
 
 static void CC1101_ATC() {
-  int8_t delta = CC1101.currentPacket.ACK.RSSI = CC1101.targetRSSI;
+  int8_t delta = CC1101.currentPacket.ACK.RSSI - CC1101.targetRSSI;
   cc1101_powerLevel_t newPowerLevel = CC1101.powerLevel;
 
   if (delta > 0 && delta > CC1101_ATC_TARGET_RANGE_DBM) {
     // RSSI is too high, decrease power
-    if (CC1101.powerLevel > MY_CC1101_POWER_0) {
+    if (CC1101.powerLevel > CC1101_POWER_0) {
       newPowerLevel = (cc1101_powerLevel_t)(CC1101.powerLevel - 1);
     }
   } else if (delta < 0 && delta < -CC1101_ATC_TARGET_RANGE_DBM) {
     // RSSI is too low, increase power
-    if (CC1101.powerLevel < MY_CC1101_POWER_7) {
+    if (CC1101.powerLevel < CC1101_POWER_7) {
       newPowerLevel = (cc1101_powerLevel_t)(CC1101.powerLevel + 1);
     }
   }
