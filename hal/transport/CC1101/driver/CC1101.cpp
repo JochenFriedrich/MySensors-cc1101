@@ -105,10 +105,11 @@ static void CC1101_configure() {
   // - Enable CCA check on RX.
   CC1101_sendRegister(CC1101_REG_MCSM1, 0b00100000);
 
-  // - Disable data whitening.
+  // - Enable data whitening.
   // - CRC enabled.
-  // - Variable packet length.
-  CC1101_sendRegister(CC1101_REG_PKTCTRL0, 0b00000101);
+  // - VarCC1101_POWER_7iable packet length.
+  CC1101_sendRegister(CC1101_REG_PKTCTRL0, 0b01000101);
+
   // - Address check with broadcast.
   // - Append 2 status bytes.
   CC1101_sendRegister(CC1101_REG_PKTCTRL1, 0b00001111);
