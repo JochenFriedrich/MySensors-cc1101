@@ -3,16 +3,17 @@
 #include "Arduino.h"
 
 // debug
-#if defined(MY_DEBUG_CC1101) || defined(MY_DEBUG_VERBOSE_CC1101)
-#define CC1101_DEBUG(x, ...) DEBUG_OUTPUT(x, ##__VA_ARGS__) //!< Debug print
-#else
-#define CC1101_DEBUG(x, ...) //!< DEBUG null
-#endif
-
-#if defined(MY_DEBUG_VERBOSE_CC1101)
+#ifdef MY_DEBUG_VERBOSE_CC1101
+#define MY_DEBUG_CC1101
 #define CC1101_DEBUG_V(x, ...) DEBUG_OUTPUT(x, ##__VA_ARGS__) //!< Debug print
 #else
 #define CC1101_DEBUG_V(x, ...) //!< DEBUG null
+#endif
+
+#ifdef MY_DEBUG_CC1101
+#define CC1101_DEBUG(x, ...) DEBUG_OUTPUT(x, ##__VA_ARGS__) //!< Debug print
+#else
+#define CC1101_DEBUG(x, ...) //!< DEBUG null
 #endif
 
 // Global status variable
@@ -455,6 +456,7 @@ static void CC1101_sendAck(const uint8_t recipient,
 }
 
 static void CC1101_txPower(cc1101_powerLevel_t power) {
+  if (power > MY_CC1101_MAX_POWER_LEVEL) return;
   CC1101_sendRegisterBurst(CC1101_REG_PATABLE, CC1101_PA_TABLE, 8);
   CC1101_sendRegister(CC1101_REG_FREND0, power | 0x10);
   CC1101.powerLevel = power;
@@ -484,12 +486,12 @@ static void CC1101_ATC() {
 
   if (delta > 0 && delta > CC1101_ATC_TARGET_RANGE_DBM) {
     // RSSI is too high, decrease power
-    if (CC1101.powerLevel > CC1101_POWER_0) {
+    if (CC1101.powerLevel > MY_CC1101_MIN_POWER_LEVEL) {
       newPowerLevel = (cc1101_powerLevel_t)(CC1101.powerLevel - 1);
     }
   } else if (delta < 0 && delta < -CC1101_ATC_TARGET_RANGE_DBM) {
     // RSSI is too low, increase power
-    if (CC1101.powerLevel < CC1101_POWER_7) {
+    if (CC1101.powerLevel < MY_CC1101_MAX_POWER_LEVEL) {
       newPowerLevel = (cc1101_powerLevel_t)(CC1101.powerLevel + 1);
     }
   }
