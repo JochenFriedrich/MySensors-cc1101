@@ -142,8 +142,6 @@ typedef enum cc1101PowerLevel_e {
 #error Invalid setting for MY_CC1101_MODEM_CONFIGURATION.
 #endif
 
-#ifndef MY_CC1101_DISABLE_WHITENING
-
 #define CC1101_MAX_PACKET_LEN (0x40u) //!< Maximum packet size that can be carried by the modem.
 #define CC1101_PREAMBLE_LENGTH (8u) //!< Preamble length, default=8
 #define CC1101_BROADCAST_ADDRESS 0xFF

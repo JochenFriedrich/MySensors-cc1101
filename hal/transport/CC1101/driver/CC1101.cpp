@@ -108,7 +108,11 @@ static void CC1101_configure() {
   // - Enable data whitening.
   // - CRC enabled.
   // - VarCC1101_POWER_7iable packet length.
+#ifdef MY_CC1101_DISABLE_WHITENING
+  CC1101_sendRegister(CC1101_REG_PKTCTRL0, 0b00000101);
+#else
   CC1101_sendRegister(CC1101_REG_PKTCTRL0, 0b01000101);
+#endif
 
   // - Address check with broadcast.
   // - Append 2 status bytes.
