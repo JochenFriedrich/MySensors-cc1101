@@ -141,18 +141,18 @@ static void CC1101_configure()
 	CC1101_sendRegister(CC1101_REG_IOCFG0, 0x06);
 }
 
-#ifdef ESP32
+#if defined(ESP32) || defined(ESP8266)
 void IRAM_ATTR CC1101_interruptHandler()
 #else
 static void CC1101_interruptHandler()
 #endif
 {
-#ifndef ESP32
+#if !defined(ESP32) && !defined(ESP8266)
 	noInterrupts();
 #endif
 	CC1101.irqFired = true;
 	CC1101.radioMode = CC1101_MODE_IDLE;
-#ifndef ESP32
+#if !defined(ESP32) && !defined(ESP8266)
 	interrupts();
 #endif
 }
