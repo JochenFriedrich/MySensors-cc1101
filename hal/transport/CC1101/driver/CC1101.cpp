@@ -280,7 +280,7 @@ static bool CC1101_sanityCheck() {
   }
   CC1101_csnHigh();
   uint8_t val = CC1101_readRegister(CC1101_REG_VERSION);
-  if (val != 0x14) {
+  if ((val != 0x14) && (val != 0x04)) {
     CC1101_DEBUG(PSTR("!CC1101:INIT:SANCHK FAIL:0x%02X\n"), val);
     return false;
   }
