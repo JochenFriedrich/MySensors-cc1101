@@ -1274,8 +1274,8 @@
  */
 #ifndef MY_CC1101_GD0_PIN
 #define MY_CC1101_GD0_PIN DEFAULT_CC1101_GD0_PIN
-#define MY_CC1101_GD0_NUM digitalPinToInterrupt(MY_CC1101_GD0_PIN)
 #endif
+#define MY_CC1101_GD0_NUM digitalPinToInterrupt(MY_CC1101_GD0_PIN)
 
 /**
  * @def MY_CC1101_FREQUENCY
