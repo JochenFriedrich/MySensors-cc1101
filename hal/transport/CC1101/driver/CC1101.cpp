@@ -185,8 +185,9 @@ static void CC1101_handle() {
         CC1101_DEBUG(PSTR("CC1101:RECV:DATA=%s,RSSI=%d LQI=%d\n"),
                      hwDebugPrintStr, CC1101.currentPacket.RSSI, CC1101.currentPacket.LQI);
 #endif
-        if (CC1101.currentPacket.header.version >=
-            CC1101_MIN_PACKET_HEADER_VERSION) {
+        if ((CC1101.currentPacket.header.version >=
+             CC1101_MIN_PACKET_HEADER_VERSION) &&
+            ((CC1101.currentPacket.header.recipient != 0) || (CC1101.address == 0))) {
           CC1101.ackReceived =
               CC1101.currentPacket.header.controlFlags.fields.ackReceived &&
               !CC1101.currentPacket.header.controlFlags.fields.ackRequested;
