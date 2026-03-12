@@ -45,7 +45,7 @@
  * @note Values in parenthesis indicate default values which will be used if you have not defined
  * the flag in your sketch.
  */
-// #define MY_DEBUG
+//#define MY_DEBUG
 
 /**
  * @def MY_DEBUGDEVICE
