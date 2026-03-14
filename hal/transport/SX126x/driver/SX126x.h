@@ -6,7 +6,7 @@
  * network topology allowing messages to be routed to nodes.
  *
  * Created by Henrik Ekblad <henrik.ekblad@mysensors.org>
- * Copyright (C) 2013-2023 Sensnology AB
+ * Copyright (C) 2013-2026 Sensnology AB
  * Full contributor list: https://github.com/mysensors/MySensors/graphs/contributors
  *
  * Documentation: http://www.mysensors.org
@@ -102,7 +102,7 @@
 #define DEFAULT_SX126x_IRQ_PIN			(2)				//!< DEFAULT_SX126x_IRQ_PIN
 #elif defined(LINUX_ARCH_RASPBERRYPI)
 #define DEFAULT_SX126x_IRQ_PIN			(22)			//!< DEFAULT_SX126x_IRQ_PIN
-#elif defined(ARDUINO_ARCH_STM32F1)
+#elif defined(ARDUINO_ARCH_STM32)
 #define DEFAULT_SX126x_IRQ_PIN			(PA3)			//!< DEFAULT_SX126x_IRQ_PIN
 #elif defined(TEENSYDUINO)
 #define DEFAULT_SX126x_IRQ_PIN			(8)				//!< DEFAULT_SX126x_IRQ_PIN
