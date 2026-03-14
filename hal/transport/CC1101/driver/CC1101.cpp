@@ -278,6 +278,12 @@ static void CC1101_readRegisterBurst(cc1101_registers_t reg, uint8_t *buffer,
 	CC1101_csnHigh();
 }
 
+static void CC1101_sendFifo(const uint8_t *buffer, const uint8_t size)
+{
+	CC1101_DEBUG_V(PSTR("CC1101:SENDFIFO:LEN=%d\n"), size);
+	CC1101_sendRegisterBurst(CC1101_REG_FIFO, buffer, size);
+}
+
 static void CC1101_readFifo(uint8_t *buffer, const uint8_t size)
 {
 	CC1101_readRegisterBurst(CC1101_REG_FIFO, buffer, size);
