@@ -27,6 +27,16 @@
  * |!| CC1101 | TXTMOUT|                                      | Transmit timeout
  * | | CC1101 | SPP  | PCT=%%u,TX LEVEL=%%d                   | Set TX level percent (PCT), TX level (LEVEL)
  * | | CC1101 | FREQ | 0x%%02x%%02x%%02x                      | Frequency set to value
+
+Options for modem config (MY_CC1101_MODEM_CONFIGURATION)
+
+| Config                      | Bandwidth | Baud   | Deviation | Comment                      |
+|-----------------------------|-----------|--------|-----------|------------------------------|
+| CC1101_MODEM_S_BR4_8_FD20   |  135KHz   |   4800 |  19kHz    | Default, low speed, reliable |
+| CC1101_MODEM_M_BR38_4_FD20  |  200KHz   |  38400 |  47kHz    | Higher speed, less reliable  |
+| CC1101_MODEM_F_BR100_FD50   |  200KHz   |   100k |  47kHz    | Much faster, less reliable   |
+| CC1101_MODEM_XF_BR250_FD125 |  320KHz   |   250k |  125kHz   | Fasest, least reliable       |
+
  *
  * @brief API declaration for CC1101
  *
@@ -111,7 +121,7 @@ typedef enum cc1101PowerLevel_e {
 
 #define CC1101_MODEM_S_BR4_8_FD20 0 //!< 135KHz bandwidth, 4800 baud, 19kHz deviation
 #define CC1101_MODEM_M_BR38_4_FD20 1 //!< 200KHz bandwidth, 38400 baud, 47kHz deviation
-#define CC1101_MODEM_F_BR100_FD50 2 //!< 135KHz bandwidth, 100000 baud, 47kHz deviation
+#define CC1101_MODEM_F_BR100_FD50 2 //!< 200KHz bandwidth, 100000 baud, 47kHz deviation
 #define CC1101_MODEM_XF_BR250_FD125 3 //!< 320KHz bandwidth, 250000 baud, 125kHz deviation
 
 #ifndef MY_CC1101_MODEM_CONFIGURATION
