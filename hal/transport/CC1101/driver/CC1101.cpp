@@ -184,7 +184,7 @@ static void CC1101_handle()
 				CC1101.currentPacket.RSSI = CC1101_RSSI_from_chip((int8_t)chipRSSI);
 				CC1101.currentPacket.LQI =
 				    CC1101.currentPacket.data[rxBytesLen - 1] & 0x7F;
-#ifdef MY_CC1101_DEBUG
+#ifdef MY_DEBUG_CC110
 				hwDebugBuf2Str((const uint8_t *)CC1101.currentPacket.data, rxBytesLen);
 				CC1101_DEBUG(PSTR("CC1101:RECV:DATA=%s,RSSI=%d LQI=%d\n"),
 				             hwDebugPrintStr, CC1101.currentPacket.RSSI, CC1101.currentPacket.LQI);
