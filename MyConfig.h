@@ -6,7 +6,7 @@
  * network topology allowing messages to be routed to nodes.
  *
  * Created by Henrik Ekblad <henrik.ekblad@mysensors.org>
- * Copyright (C) 2013-2022 Sensnology AB
+ * Copyright (C) 2013-2026 Sensnology AB
  * Full contributor list: https://github.com/mysensors/MySensors/graphs/contributors
  *
  * Documentation: http://www.mysensors.org
@@ -45,7 +45,7 @@
  * @note Values in parenthesis indicate default values which will be used if you have not defined
  * the flag in your sketch.
  */
-// #define MY_DEBUG
+//#define MY_DEBUG
 
 /**
  * @def MY_DEBUGDEVICE
@@ -132,6 +132,22 @@
  * - 'E': clear MySensors EEPROM area and reboot (i.e. "factory" reset)
  */
 //#define MY_SPECIAL_DEBUG
+
+/**
+ * @def MY_DIAGNOSTICS
+ * @brief Define MY_DIAGNOSTICS to show a diagnostics serial user interface
+ *
+ */
+//#define MY_DIAGNOSTICS
+
+/**
+ * @def MY_DIAGNOSTICS_CRYPTO
+ * @brief Define MY_DIAGNOSTICS_CRYPTO to include crypto testing functions.
+ *
+ * This feature is disabled on AVR architectures due to limited flash/RAM space but can be enabled if needed.
+ *
+ */
+//#define MY_DIAGNOSTICS
 
 /**
  * @def MY_DISABLED_SERIAL
@@ -2749,10 +2765,10 @@
 #define ARDUINO_ARCH_MEGAAVR
 
 /**
- * @def ARDUINO_ARCH_STM32F1
- * @brief Automatically set when building for STM32F1 targets
+ * @def ARDUINO_ARCH_STM32
+ * @brief Automatically set when building for STM32 targets
  */
-#define ARDUINO_ARCH_STM32F1
+#define ARDUINO_ARCH_STM32
 
 /**
  * @def TEENSYDUINO
@@ -2768,6 +2784,8 @@
 #define MY_SPECIAL_DEBUG
 #define MY_DISABLED_SERIAL
 #define MY_SPLASH_SCREEN_DISABLED
+#define MY_DIAGNOSTICS
+#define MY_DIAGNOSTICS_CRYPTO
 // linux
 #define MY_LINUX_SERIAL_PORT
 #define MY_LINUX_SERIAL_IS_PTY
