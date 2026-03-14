@@ -6,7 +6,7 @@
  * network topology allowing messages to be routed to nodes.
  *
  * Created by Henrik Ekblad <henrik.ekblad@mysensors.org>
- * Copyright (C) 2013-2022 Sensnology AB
+ * Copyright (C) 2013-2026 Sensnology AB
  * Full contributor list: https://github.com/mysensors/MySensors/graphs/contributors
  *
  * Documentation: http://www.mysensors.org
@@ -95,7 +95,7 @@
 #define DEFAULT_RFM69_IRQ_PIN			(2)												//!< DEFAULT_RFM69_IRQ_PIN
 #elif defined(LINUX_ARCH_RASPBERRYPI)
 #define DEFAULT_RFM69_IRQ_PIN			(22)											//!< DEFAULT_RFM69_IRQ_PIN
-#elif defined(ARDUINO_ARCH_STM32F1)
+#elif defined(ARDUINO_ARCH_STM32)
 #define DEFAULT_RFM69_IRQ_PIN			(PA3)											//!< DEFAULT_RFM69_IRQ_PIN
 #elif defined(TEENSYDUINO)
 #define DEFAULT_RFM69_IRQ_PIN			(8)												//!< DEFAULT_RFM69_IRQ_PIN
@@ -410,6 +410,11 @@ LOCAL bool RFM69_sendFrame(rfm69_packet_t *packet, const bool increaseSequenceCo
 LOCAL bool RFM69_send(const uint8_t recipient, uint8_t *data, const uint8_t len,
                       const rfm69_controlFlags_t flags, const bool increaseSequenceCounter = true);
 
+/**
+* @brief Gets the transmitter and receiver center frequency
+* @return frequencyHz Frequency in Hz
+*/
+LOCAL uint32_t RFM69_getFrequency(void) __attribute__((unused));
 /**
 * @brief Sets the transmitter and receiver center frequency
 * @param frequencyHz Frequency in Hz

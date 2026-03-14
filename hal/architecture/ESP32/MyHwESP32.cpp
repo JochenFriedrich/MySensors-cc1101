@@ -6,7 +6,7 @@
  * network topology allowing messages to be routed to nodes.
  *
  * Created by Henrik Ekblad <henrik.ekblad@mysensors.org>
- * Copyright (C) 2013-2022 Sensnology AB
+ * Copyright (C) 2013-2026 Sensnology AB
  * Full contributor list: https://github.com/mysensors/MySensors/graphs/contributors
  *
  * Documentation: http://www.mysensors.org
@@ -18,7 +18,7 @@
  *
  * Arduino core for ESP32: https://github.com/espressif/arduino-esp32
  *
- * MySensors ESP32 implementation, Copyright (C) 2017-2018 Olivier Mauti <olivier@mysensors.org>
+ * MySensors ESP32 implementation, Copyright (C) 2017-2026 Olivier Mauti <olivier@mysensors.org>
  *
  */
 
@@ -70,9 +70,10 @@ void hwWriteConfig(const int addr, uint8_t value)
 
 bool hwUniqueID(unique_id_t *uniqueID)
 {
+	// padding
+	(void)memset(reinterpret_cast<uint8_t *>(uniqueID), MY_HWID_PADDING_BYTE, sizeof(unique_id_t));
 	uint64_t val = ESP.getEfuseMac();
-	(void)memcpy(static_cast<void *>(uniqueID), (void *)&val, 8);
-	(void)memset(static_cast<void *>(uniqueID + 8), MY_HWID_PADDING_BYTE, 8); // padding
+	(void)memcpy(reinterpret_cast<uint8_t *>(uniqueID), (void *)&val, 8);
 	return true;
 }
 
@@ -141,8 +142,16 @@ int8_t hwSleep(const uint8_t interrupt1, const uint8_t mode1, const uint8_t inte
 
 uint16_t hwCPUVoltage(void)
 {
-	// in mV
-	return FUNCTION_NOT_SUPPORTED;
+	// experimental, not documented feature and inaccurate?
+	uint16_t internalBatReading;
+	if (WiFi.status() == 255) {
+		btStart();
+		internalBatReading = rom_phy_get_vdd33();
+		btStop();
+	} else {
+		internalBatReading = rom_phy_get_vdd33();
+	}
+	return internalBatReading;
 }
 
 uint16_t hwCPUFrequency(void)
