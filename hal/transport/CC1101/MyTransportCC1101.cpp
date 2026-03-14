@@ -60,7 +60,7 @@ uint8_t transportGetAddress(void)
 bool transportSend(const uint8_t to, const void *data, const uint8_t len, const bool noACK)
 {
 	return CC1101_sendWithRetry(to, data, len, noACK);
-//	return CC1101_sendWithRetry(to, data, len, 1);
+	//	return CC1101_sendWithRetry(to, data, len, 1);
 }
 
 bool transportDataAvailable(void)

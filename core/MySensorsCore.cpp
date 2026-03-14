@@ -6,7 +6,7 @@
  * network topology allowing messages to be routed to nodes.
  *
  * Created by Henrik Ekblad <henrik.ekblad@mysensors.org>
- * Copyright (C) 2013-2022 Sensnology AB
+ * Copyright (C) 2013-2026 Sensnology AB
  * Full contributor list: https://github.com/mysensors/MySensors/graphs/contributors
  *
  * Documentation: http://www.mysensors.org
@@ -98,6 +98,11 @@ void _infiniteLoop(void)
 
 void _begin(void)
 {
+#if defined(MY_DIAGNOSTICS)
+	(void)hwInit();
+	diagnosticsRun();
+	_infiniteLoop();
+#endif
 #if defined(MY_CORE_ONLY)
 	// initialize HW and run setup if present
 	(void)hwInit();

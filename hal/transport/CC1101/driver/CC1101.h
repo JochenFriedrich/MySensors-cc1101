@@ -27,6 +27,16 @@
  * |!| CC1101 | TXTMOUT|                                      | Transmit timeout
  * | | CC1101 | SPP  | PCT=%%u,TX LEVEL=%%d                   | Set TX level percent (PCT), TX level (LEVEL)
  * | | CC1101 | FREQ | 0x%%02x%%02x%%02x                      | Frequency set to value
+
+Options for modem config (MY_CC1101_MODEM_CONFIGURATION)
+
+| Config                      | Bandwidth | Baud   | Deviation | Comment                      |
+|-----------------------------|-----------|--------|-----------|------------------------------|
+| CC1101_MODEM_S_BR4_8_FD20   |  135KHz   |   4800 |  19kHz    | Default, low speed, reliable |
+| CC1101_MODEM_M_BR38_4_FD20  |  200KHz   |  38400 |  47kHz    | Higher speed, less reliable  |
+| CC1101_MODEM_F_BR100_FD50   |  200KHz   |   100k |  47kHz    | Much faster, less reliable   |
+| CC1101_MODEM_XF_BR250_FD125 |  320KHz   |   250k |  125kHz   | Fasest, least reliable       |
+
  *
  * @brief API declaration for CC1101
  *
@@ -59,7 +69,7 @@
 #define CC1101_433MHZ 433100000LL
 #define CC1101_868MHZ 868100000LL
 #define CC1101_915MHZ 915100000LL
-#define CC1101_FREQ_VAL (((CC1101_433MHZ)*65536LL) / CC1101_CRYSTAL_HZ)
+#define CC1101_FREQ_VAL (((MY_CC1101_FREQUENCY)*65536LL) / CC1101_CRYSTAL_HZ)
 #define CC1101_FREQ_BYTE0 ((CC1101_FREQ_VAL >> 16) & 0xFF)
 #define CC1101_FREQ_BYTE1 ((CC1101_FREQ_VAL >> 8) & 0xFF)
 #define CC1101_FREQ_BYTE2 (CC1101_FREQ_VAL & 0xFF)
@@ -78,15 +88,15 @@
 
 // Power levels represent which entry in the PA_TABLE to use.
 typedef enum cc1101PowerLevel_e {
-  CC1101_POWER_0 = 0x0, // -30dBm
-  CC1101_POWER_1 = 0x1, // -20dBm
-  CC1101_POWER_2 = 0x2, // -15dBm
-  CC1101_POWER_3 = 0x3, // -10dBm
-  CC1101_POWER_4 = 0x4, //  0dBm
-  CC1101_POWER_5 = 0x5, //  5dBm
-  CC1101_POWER_6 = 0x6, //  7dBm
-  CC1101_POWER_7 = 0x7, //  10dBm
-  CC1101_POWER_AUTO = 0xff,
+	CC1101_POWER_0 = 0x0, //!< -30dBm
+	CC1101_POWER_1 = 0x1, //!< -20dBm
+	CC1101_POWER_2 = 0x2, //!< -15dBm
+	CC1101_POWER_3 = 0x3, //!< -10dBm
+	CC1101_POWER_4 = 0x4, //!<  0dBm
+	CC1101_POWER_5 = 0x5, //!<  5dBm
+	CC1101_POWER_6 = 0x6, //!<  7dBm
+	CC1101_POWER_7 = 0x7, //!<  10dBm
+	CC1101_POWER_AUTO = 0xff, //!< Enable ATC.
 } cc1101_powerLevel_t;
 
 #ifndef MY_CC1101_POWER_LEVEL
@@ -109,10 +119,10 @@ typedef enum cc1101PowerLevel_e {
 #define CC1101_RSSI_OFFSET (74u)          //!< RSSI offset
 #define CC1101_TARGET_RSSI (-50)          //!< RSSI target
 
-#define CC1101_MODEM_S_BR4_8_FD20 0
-#define CC1101_MODEM_M_BR38_4_FD20 1
-#define CC1101_MODEM_F_BR100_FD50 2
-#define CC1101_MODEM_XF_BR250_FD125 3
+#define CC1101_MODEM_S_BR4_8_FD20 0 //!< 135KHz bandwidth, 4800 baud, 19kHz deviation
+#define CC1101_MODEM_M_BR38_4_FD20 1 //!< 200KHz bandwidth, 38400 baud, 47kHz deviation
+#define CC1101_MODEM_F_BR100_FD50 2 //!< 200KHz bandwidth, 100000 baud, 47kHz deviation
+#define CC1101_MODEM_XF_BR250_FD125 3 //!< 320KHz bandwidth, 250000 baud, 125kHz deviation
 
 #ifndef MY_CC1101_MODEM_CONFIGURATION
 #define MY_CC1101_MODEM_CONFIGURATION CC1101_MODEM_M_BR38_4_FD20
@@ -147,19 +157,19 @@ typedef enum cc1101PowerLevel_e {
 #define CC1101_BROADCAST_ADDRESS 0xFF
 
 #ifndef MY_CC1101_SYNC_WORD
-#define MY_CC1101_SYNC_WORD 0xF543
+#define MY_CC1101_SYNC_WORD 0xF543 //!< Sync word, can be used to separate networks.
 #endif
 
 #define CC1101_TX_RETRIES (5u) //!< Retries in case of fail to transmit (eg CCA)
 
 #if !defined(MY_CC1101_TX_TIMEOUT_MS)
 #define MY_CC1101_TX_TIMEOUT_MS                                                \
-  (50ul) //!< Timeout before TX is considered failed.
+	(50ul) //!< Timeout before TX is considered failed.
 #endif
 
 #if !defined(MY_CC1101_TX_RETRY_DELAY_MS)
 #define MY_CC1101_TX_RETRY_DELAY_MS                                            \
-  (50l) //!< Delay before reattempting transmit.
+	(50l) //!< Delay before reattempting transmit.
 #endif
 
 #define CC1101_SEND_RETRIES (4u) //!< Retries in case ACK is not received.
@@ -170,8 +180,8 @@ typedef enum cc1101PowerLevel_e {
 
 #if !defined(MY_CC1101_ACK_SEND_DELAY_MS)
 #define MY_CC1101_ACK_SEND_DELAY_MS                                            \
-  5 //!< Delay before sending ACK packet, to give slow nodes a chance to flip to
-    //!< RX.
+	5 //!< Delay before sending ACK packet, to give slow nodes a chance to flip to
+//!< RX.
 #endif
 
 #if !defined(MY_CC1101_CSN_TIMEOUT_MS)
@@ -186,8 +196,8 @@ typedef enum cc1101PowerLevel_e {
 // air-time approximation for timeout, 1 hop ~15 bytes payload - adjust if
 // needed <fill in>
 #define CC1101_RETRY_TIMEOUT_MS                                                \
-  (1000ul) //!< Timeout for ACK, adjustments needed if modem configuration
-           //!< changed (air time different)
+	(1000ul) //!< Timeout for ACK, adjustments needed if modem configuration
+//!< changed (air time different)
 #endif
 
 #define CC1101_WRITE_SINGLE 0x00
@@ -199,7 +209,7 @@ typedef enum cc1101PowerLevel_e {
  * @brief Sequence number data type
  */
 typedef uint16_t
-    cc1101_sequenceNumber_t; // will eventually change to uint8_t in 3.0
+cc1101_sequenceNumber_t; // will eventually change to uint8_t in 3.0
 /**
  * @brief RSSI data type
  */
@@ -212,13 +222,13 @@ typedef uint8_t cc1101_LQI_t;
  * @brief Control flag data type
  */
 typedef union {
-  struct {
-    uint8_t : 5;            //!< reserved
-    bool ackRssiReport : 1; //!< ackRssiReport
-    bool ackReceived : 1;   //!< ackReceived
-    bool ackRequested : 1;  //!< ackRequested
-  } fields;                 //!< fields
-  uint8_t values;           //!< values
+	struct {
+		uint8_t : 5;            //!< reserved
+		bool ackRssiReport : 1; //!< ackRssiReport
+		bool ackReceived : 1;   //!< ackReceived
+		bool ackRequested : 1;  //!< ackRequested
+	} fields;                 //!< fields
+	uint8_t values;           //!< values
 } cc1101_controlFlags_t;
 
 /**
@@ -230,83 +240,83 @@ typedef uint8_t cc1101_status_t;
  * @brief cc1101 header
  */
 typedef struct {
-  // First two bytes must be length/address per the CC1101 packet format.
-  uint8_t length;                     //!< Length of data - 1 byte
-  uint8_t recipient;                  //!< Payload recipient
-  uint8_t version;                    //!< Header version
-  uint8_t sender;                     //!< Payload sender
-  cc1101_controlFlags_t controlFlags; //!< Control flags, used for ACK
-  cc1101_sequenceNumber_t
-      sequenceNumber; //!< Packet sequence number, used for ACK
+	// First two bytes must be length/address per the CC1101 packet format.
+	uint8_t length;                     //!< Length of data - 1 byte
+	uint8_t recipient;                  //!< Payload recipient
+	uint8_t version;                    //!< Header version
+	uint8_t sender;                     //!< Payload sender
+	cc1101_controlFlags_t controlFlags; //!< Control flags, used for ACK
+	cc1101_sequenceNumber_t
+	sequenceNumber; //!< Packet sequence number, used for ACK
 } __attribute__((packed)) cc1101_header_t;
 
 /**
  * @brief cc1101 ACK packet structure
  */
 typedef struct {
-  cc1101_sequenceNumber_t sequenceNumber; //!< sequence number
-  cc1101_RSSI_t RSSI;                     //!< RSSI
-  cc1101_LQI_t LQI;                       //!< LQI
+	cc1101_sequenceNumber_t sequenceNumber; //!< sequence number
+	cc1101_RSSI_t RSSI;                     //!< RSSI
+	cc1101_LQI_t LQI;                       //!< LQI
 } __attribute__((packed)) cc1101_ack_t;
 
 #define CC1101_HEADER_LEN                                                      \
-  sizeof(cc1101_header_t) //!< Size header inside payload
+	sizeof(cc1101_header_t) //!< Size header inside payload
 #define CC1101_MAX_PAYLOAD_LEN                                                 \
-  (CC1101_MAX_PACKET_LEN - CC1101_HEADER_LEN) //!< Max payload length
+	(CC1101_MAX_PACKET_LEN - CC1101_HEADER_LEN) //!< Max payload length
 
 #define CC1101_PACKET_HEADER_VERSION (1u) //!< CC1101 packet header version
 #define CC1101_MIN_PACKET_HEADER_VERSION                                       \
-  (1u) //!< Minimal CC1101 packet header version
+	(1u) //!< Minimal CC1101 packet header version
 
 /**
  * @brief Packet structure
  */
 typedef struct {
-  union {
-    struct {
-      cc1101_header_t header; //!< header
-      union {
-        uint8_t payload[CC1101_MAX_PAYLOAD_LEN]; //!< Payload, i.e. MySensors
-                                                 //!< message
-        cc1101_ack_t ACK;                        //!< Union: ACK
-      };
-    };
-    uint8_t data[CC1101_MAX_PACKET_LEN]; //!< RAW
-  };
-  uint8_t payloadLen; //!< Length of payload (excluding header)
-  cc1101_RSSI_t RSSI; //!< RSSI of current packet, RSSI = value - 137
-  cc1101_LQI_t LQI;   //!< LQI of current packet
+	union {
+		struct {
+			cc1101_header_t header; //!< header
+			union {
+				uint8_t payload[CC1101_MAX_PAYLOAD_LEN]; //!< Payload, i.e. MySensors
+				//!< message
+				cc1101_ack_t ACK;                        //!< Union: ACK
+			};
+		};
+		uint8_t data[CC1101_MAX_PACKET_LEN]; //!< RAW
+	};
+	uint8_t payloadLen; //!< Length of payload (excluding header)
+	cc1101_RSSI_t RSSI; //!< RSSI of current packet, RSSI = value - 137
+	cc1101_LQI_t LQI;   //!< LQI of current packet
 } __attribute__((packed)) cc1101_packet_t;
 
 /**
  * @brief CC1101 operation Modes
  */
 typedef enum {
-  CC1101_MODE_SLEEP = 0x00, //!< CC1101 is in sleep mode
-  CC1101_MODE_IDLE,         //!< CC1101 is in idle mode.
-  CC1101_MODE_FS,           //!< CC1101 is in frequency synthesis mode
-  CC1101_MODE_TX,           //!< CC1101 is in transmit mode
-  CC1101_MODE_RX,           //!< CC1101 is in receive mode
-  CC1101_MODE_CCA           //!< CC1101 is in clear channel assessment mode
+	CC1101_MODE_SLEEP = 0x00, //!< CC1101 is in sleep mode
+	CC1101_MODE_IDLE,         //!< CC1101 is in idle mode.
+	CC1101_MODE_FS,           //!< CC1101 is in frequency synthesis mode
+	CC1101_MODE_TX,           //!< CC1101 is in transmit mode
+	CC1101_MODE_RX,           //!< CC1101 is in receive mode
+	CC1101_MODE_CCA           //!< CC1101 is in clear channel assessment mode
 } cc1101_radioModes_t;
 
 /**
  * @brief CC1101 internal variables
  */
 typedef struct {
-  uint8_t address;                          //!< Node address
-  cc1101_packet_t currentPacket;            //!< Buffer for current packet
-  cc1101_packet_t lastAck;                  //!< Last ack received.
-  cc1101_sequenceNumber_t txSequenceNumber; //!< CC1101_txSequenceNumber
-  cc1101_powerLevel_t powerLevel;           //!< TX power level index
-  cc1101_radioModes_t radioMode;            //!< Current radio mode
-  cc1101_RSSI_t targetRSSI;                 //!< ATC target power level
-  cc1101_status_t chipStatus;               //<! CC1101 status byte.
-  bool ATCenabled;                          //!< ATC enabled
-  volatile bool ackReceived : 1;            //!< ACK received
-  volatile bool dataReceived : 1;           //!< Data received
-  volatile bool txComplete : 1;             //!< Transmission complete
-  volatile bool irqFired : 1;               //!< irq occured
+	uint8_t address;                          //!< Node address
+	cc1101_packet_t currentPacket;            //!< Buffer for current packet
+	cc1101_packet_t lastAck;                  //!< Last ack received.
+	cc1101_sequenceNumber_t txSequenceNumber; //!< CC1101_txSequenceNumber
+	cc1101_powerLevel_t powerLevel;           //!< TX power level index
+	cc1101_radioModes_t radioMode;            //!< Current radio mode
+	cc1101_RSSI_t targetRSSI;                 //!< ATC target power level
+	cc1101_status_t chipStatus;               //<! CC1101 status byte.
+	bool ATCenabled;                          //!< ATC enabled
+	volatile bool ackReceived : 1;            //!< ACK received
+	volatile bool dataReceived : 1;           //!< Data received
+	volatile bool txComplete : 1;             //!< Transmission complete
+	volatile bool irqFired : 1;               //!< irq occured
 } cc1101_internal_t;
 
 /**
