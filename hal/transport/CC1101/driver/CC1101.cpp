@@ -278,12 +278,6 @@ static void CC1101_readRegisterBurst(cc1101_registers_t reg, uint8_t *buffer,
 	CC1101_csnHigh();
 }
 
-static void CC1101_sendFifo(const uint8_t *buffer, const uint8_t size)
-{
-	CC1101_DEBUG_V(PSTR("CC1101:SENDFIFO:LEN=%d\n"), size);
-	CC1101_sendRegisterBurst(CC1101_REG_FIFO, buffer, size);
-}
-
 static void CC1101_readFifo(uint8_t *buffer, const uint8_t size)
 {
 	CC1101_readRegisterBurst(CC1101_REG_FIFO, buffer, size);
@@ -297,7 +291,7 @@ static bool CC1101_sanityCheck()
 	}
 	CC1101_csnHigh();
 	uint8_t val = CC1101_readRegister(CC1101_REG_VERSION);
-	if (val != 0x14) {
+	if ((val != 0x14) && (val != 0x04)) {
 		CC1101_DEBUG(PSTR("!CC1101:INIT:SANCHK FAIL:0x%02X\n"), val);
 		return false;
 	}
